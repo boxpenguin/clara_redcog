@@ -8,7 +8,7 @@ class Mycog:
         self.bot = bot
 
     @commands.command()
-    async def drawpile-sessions(self):
+    async def drawpilesessions(self):
     """Get all sessions running"""
     await self.bot.say("Drawpile Session information")
     sessions = os.listdir("/var/drawpile/sessions")
