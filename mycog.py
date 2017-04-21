@@ -1,4 +1,4 @@
-import discord
+import discord, os
 from discord.ext import commands
 
 class Mycog:
@@ -8,11 +8,11 @@ class Mycog:
         self.bot = bot
 
     @commands.command()
-    async def mycom(self):
-        """This does stuff!"""
-
-        #Your code will go here
-        await self.bot.say("I can do stuff!")
+    async def drawpile-sessions(self):
+    """Get all sessions running"""
+    await self.bot.say("Drawpile Session information")
+    sessions = os.listdir("/var/drawpile/sessions")
+    await self.bot.say(sessions)
 
 def setup(bot):
     bot.add_cog(Mycog(bot))
