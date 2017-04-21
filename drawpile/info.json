@@ -1,0 +1,9 @@
+{
+    "AUTHOR" : "rakunko",
+    "SHORT" : "drawpile",
+    "DESCRIPTION" : "drawpile",
+    "DISABLED" : false,
+    "NAME" : "Drawpile",
+    "TAGS" : ["server info"],
+    "INSTALL_MSG" : "Done"
+}

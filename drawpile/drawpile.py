@@ -1,7 +1,7 @@
 import discord, os
 from discord.ext import commands
 
-class Mycog:
+class Drawpile:
     """My custom cog that does stuff!"""
 
     def __init__(self, bot):
