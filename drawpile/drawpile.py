@@ -1,4 +1,4 @@
-import discord, os, collections, math, re
+import discord, os, math, re
 from discord.ext import commands
 
 def convert_size(size_bytes):
@@ -19,7 +19,7 @@ class Drawpile:
     @commands.command()
     async def drawpile(self):
         await self.bot.say("Testing")
-    
+
     async def drawpilesessionsizes(self):
         """Get all sessions running"""
         basedir = "/var/drawpile/sessions"
@@ -39,14 +39,5 @@ class Drawpile:
                     size = os.path.getsize(path)
                     await self.bot.say("File:\t{0}" .format(path))
                     await self.bot.say("Size:\t{0}" .format(convert_size(size)))
-#        names = os.listdir(basedir)
-#        paths = [os.path.join(basedir, name) for name in names]
-#        sizes = [(path, os.stat(path).st_size) for path in paths]
-#        grouped = collections.defaultdict(list)
-#        for path, size in sizes:
-#            grouped[size].append(path)
-#        sessions = [open(path) for path in grouped[0]]
-#        await self.bot.say(sessions)
-
 def setup(bot):
     bot.add_cog(Drawpile(bot))
