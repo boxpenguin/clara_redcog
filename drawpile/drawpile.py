@@ -120,7 +120,7 @@ class Drawpile:
         session_json = getdata("sessions")
         session_data = json.dumps(session_json, separators=(',', ':'))
         await self.bot.say(session_json)
-        await self.bot.say(session_data[0]['title'])
+        await self.bot.say(session_json[0]['title'])
         #for a in range(len(session_data)):
         #    await self.bot.say("Session #:\t {0}" .format(a+1))
         #    await self.bot.say("Title:\t\t {0}" .format(session_json[a]['title']))
