@@ -118,7 +118,7 @@ class Drawpile:
     @commands.command()
     async def drawpile(self):
         session_json = getdata("sessions")
-        session_data = json.load(session_json)
+        session_data = json.dumps(session_json, separators=(',', ':'))
         for a in range(len(session_data)):
             await self.bot.say("Session #:\t {0}" .format(a+1))
             await self.bot.say("Title:\t\t {0}" .format(session_data[a]['title']))
