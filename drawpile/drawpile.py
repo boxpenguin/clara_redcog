@@ -123,7 +123,7 @@ class Drawpile:
         # await self.bot.say(session_data[0]['title'])
         for a in range(len(session_data)):
             await self.bot.say("Session #:\t {0}" .format(a+1))
-            await self.bot.say("Title:\t\t {0}" .format(session_date[a]['title']))
+            await self.bot.say("Title:\t\t {0}" .format(session_data[a]['title']))
             await self.bot.say("Alias:\t\t {0}" .format(session_data[a]['alias']))
             await self.bot.say("Users:\t\t {0}" .format(session_data[a]['userCount']))
             await self.bot.say("ID:\t\t {0}" .format(session_data[a]['id']))
