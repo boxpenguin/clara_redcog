@@ -119,29 +119,30 @@ class Drawpile:
     async def drawpile(self):
         session_json = getdata("sessions")
         session_data = json.loads(session_json)
-        await self.bot.say(session_json)
-        await self.bot.say(session_data[0]['title'])
-        #for a in range(len(session_data)):
-        #    await self.bot.say("Session #:\t {0}" .format(a+1))
-        #    await self.bot.say("Title:\t\t {0}" .format(session_json[a]['title']))
-        #    await self.bot.say("Alias:\t\t {0}" .format(session_json[a]['alias']))
-        #    await self.bot.say("Users:\t\t {0}" .format(session_json[a]['userCount']))
-        #    await self.bot.say("ID:\t\t {0}" .format(session_json[a]['id']))
-        #    await self.bot.say("Session Size:\t {0}" .format(convert_size(session_json[a]['size'])))
+        # await self.bot.say(session_json)
+        # await self.bot.say(session_data[0]['title'])
+        for a in range(len(session_data)):
+            await self.bot.say("Session #:\t {0}" .format(a+1))
+            await self.bot.say("Title:\t\t {0}" .format(session_date[a]['title']))
+            await self.bot.say("Alias:\t\t {0}" .format(session_data[a]['alias']))
+            await self.bot.say("Users:\t\t {0}" .format(session_data[a]['userCount']))
+            await self.bot.say("ID:\t\t {0}" .format(session_data[a]['id']))
+            await self.bot.say("Session Size:\t {0}" .format(convert_size(session_data[a]['size'])))
+            await self.bot.say("")
+        user_json = getdata("users")
+        users_data = json.loads(user_json)
+        # Need to add a safely to prevent the code if there is no user
+        #for b in range(len(users_data)):
+        #    await self.bot.say("User:\t\t {0}" .format(users_data[b]['name']))
+        #    userip = users_data[b]['ip']
+        #    ip_data = getip(userip)
+        #    await self.bot.say("IP:\t\t {0}" .format(ip_data))
+        #    usersession = users_data[b]['session']
+        #    for c in range(len(session_data)):
+        #        if usersession == session_data[c]['id']:
+        #            await self.bot.say("Current Session: {0}" .format(session_data[c]['title']))
+        #            await self.bot.say("Session ID:\t {0}" .format(users_data[b]['session']))
         #    await self.bot.say("")
-       # user_json = getdata("users")
-       # users_data = json.load()
-       # for b in range(len(users_data)):
-       #     await self.bot.say("User:\t\t {0}" .format(users_data[b]['name']))
-       #     userip = users_data[b]['ip']
-       #     ip_data = getip(userip)
-       #     await self.bot.say("IP:\t\t {0}" .format(ip_data))
-       #     usersession = users_data[b]['session']
-       #     for c in range(len(session_data)):
-       #         if usersession == session_data[c]['id']:
-       #             await self.bot.say("Current Session: {0}" .format(session_data[c]['title']))
-       #             await self.bot.say("Session ID:\t {0}" .format(users_data[b]['session']))
-       #     await self.bot.say("")
 
     # async def drawpilesessionsizes(self):
     #     """Get all sessions running sizes"""
