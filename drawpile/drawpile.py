@@ -141,7 +141,7 @@ class Drawpile:
        #         if usersession == session_data[c]['id']:
        #             await self.bot.say("Current Session: {0}" .format(session_data[c]['title']))
        #             await self.bot.say("Session ID:\t {0}" .format(users_data[b]['session']))
-            await self.bot.say("")
+       #     await self.bot.say("")
 
     # async def drawpilesessionsizes(self):
     #     """Get all sessions running sizes"""
