@@ -17,6 +17,10 @@ def getdata(type):
     output = requests.get(url, auth=HTTPBasicAuth('clara', 'amdk6-2')).text # displays content
     jsonoutout = json.loads(output)
     return output
+def getip(ip):
+    url = ("https://ipinfo.io/{0}/" .format(ip))
+    output = requests.get(url).text # displays content
+    return output
 
 class Drawpile:
     def __init__(self, bot):
@@ -103,7 +107,7 @@ class Drawpile:
                 }
     """
     @commands.command()
-    async def drawpile(self, type):
+    async def drawpiledetail(self, type):
         await self.bot.say("Getting information")
         await self.bot.say(getdata(type))
         # url = "http://localhost:8081/users/"
@@ -111,26 +115,49 @@ class Drawpile:
         # this did not work with the super complex php loader for wordpress but it can do some basic stuff
         # might not be able handle the json out wont know til tomorrow sadly
         # await self.bot.say("{0}" .format(output))
+    async def drawpile(self):
+        session_data = json.load(getdata(sessions))
+        for a in range(len(session_data)):
+            print("Session #:\t {0}" .format(a+1))
+            print("Title:\t\t {0}" .format(session_data[a]['title']))
+            print("Alias:\t\t {0}" .format(session_data[a]['alias']))
+            print("Users:\t\t {0}" .format(session_data[a]['userCount']))
+            print("ID:\t\t {0}" .format(session_data[a]['id']))
+            print("Session Size:\t {0}" .format(convert_size(session_data[a]['size'])))
+            print
 
-    async def drawpilesessionsizes(self):
-        """Get all sessions running sizes"""
-        basedir = "/var/drawpile/sessions"
-        with open("/var/drawpile/templates/drawpile.ini", "r") as a:
-            file = a.readlines()
-            a.close()
-        for i, line in enumerate(file):
-            if "sessionSizeLimit" in line:
-                for l in file[i:i+1]:
-                    sizelimit = l
-        await self.bot.say("Drawpile Session information")
-        await self.bot.say(sizelimit)
-        for f in os.listdir(basedir):
-            path = os.path.join(basedir, f)
-            if os.path.isfile(path):
-                if re.search('.dprec', path):
-                    size = os.path.getsize(path)
-                    await self.bot.say("File:\t{0}" .format(path))
-                    await self.bot.say("Size:\t{0}" .format(convert_size(size)))
+        users_data = json.load(getdata(users))
+        for b in range(len(users_data)):
+            print("User:\t\t {0}" .format(users_data[b]['name']))
+            userip = users_data[b]['ip']
+            ip_data = getip(userip)
+            print("IP:\t\t {0}" .format(ip_data))
+            usersession = users_data[b]['session']
+            for c in range(len(session_data)):
+                if usersession == session_data[c]['id']:
+                    print("Current Session: {0}" .format(session_data[c]['title']))
+                    print("Session ID:\t {0}" .format(users_data[b]['session']))
+            print
+            
+    # async def drawpilesessionsizes(self):
+    #     """Get all sessions running sizes"""
+    #     basedir = "/var/drawpile/sessions"
+    #     with open("/var/drawpile/templates/drawpile.ini", "r") as a:
+    #         file = a.readlines()
+    #         a.close()
+    #     for i, line in enumerate(file):
+    #         if "sessionSizeLimit" in line:
+    #             for l in file[i:i+1]:
+    #                 sizelimit = l
+    #     await self.bot.say("Drawpile Session information")
+    #     await self.bot.say(sizelimit)
+    #     for f in os.listdir(basedir):
+    #         path = os.path.join(basedir, f)
+    #         if os.path.isfile(path):
+    #             if re.search('.dprec', path):
+    #                 size = os.path.getsize(path)
+    #                 await self.bot.say("File:\t{0}" .format(path))
+    #                 await self.bot.say("Size:\t{0}" .format(convert_size(size)))
 
 def setup(bot):
     bot.add_cog(Drawpile(bot))
