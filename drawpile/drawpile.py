@@ -129,7 +129,7 @@ class Drawpile:
             await self.bot.say("Users:\t\t\t\t{0}" .format(session_data[a]['userCount']))
             await self.bot.say("ID:\t\t\t\t\t  {0}" .format(session_data[a]['id']))
             await self.bot.say("Session Size:\t{0} / 15 MB" .format(convert_size(session_data[a]['size'])))
-            await self.bot.say(":star2:")
+            await self.bot.say("˚. ★ *˛ ˚♥* ✰。˚ ˚ღ。* ˛˚ ♥ 。✰˚* ˚ ★ღ")
         user_json = getdata("users")
         users_data = json.loads(user_json)
         # Need to add a safely to prevent the code if there is no user
