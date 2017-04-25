@@ -118,27 +118,27 @@ class Drawpile:
     async def drawpile(self):
         session_data = json.load(getdata(sessions))
         for a in range(len(session_data)):
-            print("Session #:\t {0}" .format(a+1))
-            print("Title:\t\t {0}" .format(session_data[a]['title']))
-            print("Alias:\t\t {0}" .format(session_data[a]['alias']))
-            print("Users:\t\t {0}" .format(session_data[a]['userCount']))
-            print("ID:\t\t {0}" .format(session_data[a]['id']))
-            print("Session Size:\t {0}" .format(convert_size(session_data[a]['size'])))
-            print
+            await self.bot.say("Session #:\t {0}" .format(a+1))
+            await self.bot.say("Title:\t\t {0}" .format(session_data[a]['title']))
+            await self.bot.say("Alias:\t\t {0}" .format(session_data[a]['alias']))
+            await self.bot.say("Users:\t\t {0}" .format(session_data[a]['userCount']))
+            await self.bot.say("ID:\t\t {0}" .format(session_data[a]['id']))
+            await self.bot.say("Session Size:\t {0}" .format(convert_size(session_data[a]['size'])))
+            await self.bot.say()
 
         users_data = json.load(getdata(users))
         for b in range(len(users_data)):
-            print("User:\t\t {0}" .format(users_data[b]['name']))
+            await self.bot.say("User:\t\t {0}" .format(users_data[b]['name']))
             userip = users_data[b]['ip']
             ip_data = getip(userip)
-            print("IP:\t\t {0}" .format(ip_data))
+            await self.bot.say("IP:\t\t {0}" .format(ip_data))
             usersession = users_data[b]['session']
             for c in range(len(session_data)):
                 if usersession == session_data[c]['id']:
-                    print("Current Session: {0}" .format(session_data[c]['title']))
-                    print("Session ID:\t {0}" .format(users_data[b]['session']))
+                    await self.bot.say("Current Session: {0}" .format(session_data[c]['title']))
+                    await self.bot.say("Session ID:\t {0}" .format(users_data[b]['session']))
             print
-            
+
     # async def drawpilesessionsizes(self):
     #     """Get all sessions running sizes"""
     #     basedir = "/var/drawpile/sessions"
