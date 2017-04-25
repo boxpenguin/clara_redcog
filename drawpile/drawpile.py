@@ -1,6 +1,9 @@
-import discord, os, math, re
+#/usr/bin/python3.5
+import discord, os, collections, math, re, requests, json
 from discord.ext import commands
+from requests.auth import HTTPBasicAuth
 
+# Pre bot command funcs
 def convert_size(size_bytes):
    if (size_bytes == 0):
        return '0B'
@@ -9,19 +12,108 @@ def convert_size(size_bytes):
    p = math.pow(1024, i)
    s = round(size_bytes/p, 2)
    return '%s %s' % (s, size_name[i])
+def getdata(type):
+    url = ("http://localhost:8081/{0}/" .format(type))
+    output = requests.get(url, auth=HTTPBasicAuth('clara', 'amdk6-2')).text # displays content
+    jsonoutout = json.loads(output)
+    return output
 
 class Drawpile:
-    """My custom cog that does stuff!"""
-
     def __init__(self, bot):
         self.bot = bot
-
+    """
+    What does this doo
+    Using drawpiles admin webserver I can grab information however this is poorly documented
+    and is not very clear for any platform. I will assume this means using any method to post
+    to a http server will do the  trick
+    https://github.com/drawpile/Drawpile/b/rutorrent/lob/master/doc/server-api.md
+    Commands:
+            drawpilegetsessions
+                Returns all sessions running
+                    GET /sessions/
+                    [
+                        {
+                            "id": "uuid (unique session ID)",
+                            "alias": "ID alias (if set)",
+                            //"protocol": "session protocol version",
+                            "userCount": "number of users",
+                            //"founder": "name of the user who created the session",
+                            "title": "session title",
+                            //"hasPassword": true/false (is the session password protected),
+                            //"closed": true/false (is the session closed to new users),
+                            "persistent": true/false (is persistence enabled for this session),
+                            "nsfm": true/false (does this session contain NSFM content),
+                            "startTime": "timestamp",
+                            "size": history size in bytes,
+                        }, ...
+                    ]
+            drawpilegetusersadmin
+                Returns all users all information
+                    GET /users/
+                    [
+                        {
+                            "session": "session ID (if empty, this user hasn't joined any session yet)",
+                                translate this ID to title
+                            "id": user ID (unique only within the session),
+                            "name": "user name",
+                            "ip": "IP address",
+                            "auth": true/false (is authenticated),
+                            "op": true/false (is session owner),
+                            //"muted": true/false (is blocked from chat),
+                            //"mod": true/false (is a moderator),
+                            //"tls": true/false (is using a secure connection)
+                        }
+            drawpilegetusers
+                Returns all users does not show ip
+                    GET /users/
+                    [
+                        {
+                            "session": "session ID (if empty, this user hasn't joined any session yet)",
+                                translate this ID to title
+                            //"id": user ID (unique only within the session),
+                            "name": "user name",
+                            //"ip": "IP address",
+                            //"auth": true/false (is authenticated),
+                            //"op": true/false (is session owner),
+                            //"muted": true/false (is blocked from chat),
+                            //"mod": true/false (is a moderator),
+                            //"tls": true/false (is using a secure connection)
+                        }
+                    ]
+            drawpilesendmsg session "message" #might not be needed
+                Send message to drawpile chat
+                PUT /session/:id/
+                {
+                    "message": "send a message to all participants",
+                    //"alert": "send an alert to all participants"
+                }
+            drawpilesendalert session "alert" #might not be needed
+                Send alert to drawpile chat
+                PUT /session/:id/
+                {
+                    //"message": "send a message to all participants",
+                    "alert": "send an alert to all participants"
+                }
+            drawpilesendspam  "alert"
+                Send alert to every session (for server alerts only)
+                PUT /session/:id/
+                {
+                    //"message": "send a message to all participants",
+                    "alert": "send an alert to all participants"
+                }
+    """
     @commands.command()
-    async def drawpile(self):
-        await self.bot.say("Testing")
+    async def drawpile(self, type):
+        await self.bot.say("Getting information")
+        await self.bot.say(getdata(type))
+        # url = "http://localhost:8081/users/"
+        # output = requests.get(url, auth=HTTPBasicAuth('clara', 'amdk6-2')).text # displays content
+        # this did not work with the super complex php loader for wordpress but it can do some basic stuff
+        # might not be able handle the json out wont know til tomorrow sadly
+        # await self.bot.say("{0}" .format(output))
 
     async def drawpilesessionsizes(self):
-        """Get all sessions running"""
+        """Get all sessions running sizes"""
         basedir = "/var/drawpile/sessions"
         with open("/var/drawpile/templates/drawpile.ini", "r") as a:
             file = a.readlines()
@@ -39,5 +131,6 @@ class Drawpile:
                     size = os.path.getsize(path)
                     await self.bot.say("File:\t{0}" .format(path))
                     await self.bot.say("Size:\t{0}" .format(convert_size(size)))
+
 def setup(bot):
     bot.add_cog(Drawpile(bot))
