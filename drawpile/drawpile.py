@@ -115,8 +115,8 @@ class Drawpile:
         # this did not work with the super complex php loader for wordpress but it can do some basic stuff
         # might not be able handle the json out wont know til tomorrow sadly
         # await self.bot.say("{0}" .format(output))
-   @commands.command()
-   async def drawpile(self):
+    @commands.command()
+    async def drawpile(self):
         session_json = getdata("sessions")
         session_data = json.load(session_json)
         for a in range(len(session_data)):
