@@ -84,7 +84,7 @@ class Drawpile:
                     if usersession == session_data[c]['id']:
                         await self.bot.say("Session:\t\t {0}" .format(session_data[c]['title']))
                         await self.bot.say("_")
-
+    @commands.command()
     async def drawpilesessionsizes(self):
         """Get all sessions running sizes directly from server - depricated since version 1.0"""
         basedir = "/var/drawpile/sessions"
