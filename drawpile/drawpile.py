@@ -22,6 +22,11 @@ def getip(ip):
     output = requests.get(url).text # displays content
     return output
 
+def gettime(lat,lng):
+    url = ("http://api.geonames.org/timezoneJSON?lat={0}&lng={1}&username=demo" .format(lat, lng))
+    output = requests.get(url).text
+    return output
+
 class Drawpile:
     def __init__(self, bot):
         self.bot = bot
@@ -117,33 +122,43 @@ class Drawpile:
         # await self.bot.say("{0}" .format(output))
     @commands.command()
     async def drawpile(self):
+        usercount = 0
         await self.bot.say("Getting Drawpile Session info :desktop:")
         session_json = getdata("sessions")
         session_data = json.loads(session_json)
-        # await self.bot.say(session_json)
-        # await self.bot.say(session_data[0]['title'])
         for a in range(len(session_data)):
             await self.bot.say("Session #:\t\t {0}" .format(a+1))
             await self.bot.say("Title:\t\t\t\t  {0}" .format(session_data[a]['title']))
             await self.bot.say("Alias:\t\t\t\t {0}" .format(session_data[a]['alias']))
             await self.bot.say("Users:\t\t\t\t{0}" .format(session_data[a]['userCount']))
+            usercount += session_data[a]['userCount']
             await self.bot.say("ID:\t\t\t\t\t  {0}" .format(session_data[a]['id']))
             await self.bot.say("Session Size:\t{0} / 15 MB" .format(convert_size(session_data[a]['size'])))
-            await self.bot.say("_________________________________________________")
+            await self.bot.say("_")
         user_json = getdata("users")
         users_data = json.loads(user_json)
-        # Need to add a safely to prevent the code if there is no user
-        #for b in range(len(users_data)):
-        #    await self.bot.say("User:\t\t {0}" .format(users_data[b]['name']))
-        #    userip = users_data[b]['ip']
-        #    ip_data = getip(userip)
-        #    await self.bot.say("IP:\t\t {0}" .format(ip_data))
-        #    usersession = users_data[b]['session']
-        #    for c in range(len(session_data)):
-        #        if usersession == session_data[c]['id']:
-        #            await self.bot.say("Current Session: {0}" .format(session_data[c]['title']))
-        #            await self.bot.say("Session ID:\t {0}" .format(users_data[b]['session']))
-        #    await self.bot.say("")
+        await self.bot.say("Getting Drawpile User info ~~~ {0} artist(s) online :pencil2:" .format(usercount))
+        if usercount > 0:
+            for b in range(len(users_data)):
+                await self.bot.say("User:\t\t\t\t {0}" .format(users_data[b]['name']))
+                userip = users_data[b]['ip']
+                ip_json = getip(userip)
+                ip_data = json.loads(ip_json)
+                if ip_data['ip'] == "192.168.1.1":
+                    await self.bot.say("IP:\t\t\t\t\t localhost")
+                    # await self.bot.say("Time:\t\t\t\t\t $time")
+                else:
+                    await self.bot.say("IP:\t\t\t\t\t {0}" .format(ip_data['ip']))
+                    user_loc = ip_data['loc']
+                    user_geo = user_loc.split(",")
+                    user_time = gettime(user_geo[0],user_geo[1])
+                    user_time_data = json.loads(user_time)
+                    await self.bot.say("Local Time:\t{0}" .format(user_time_data['time']))
+                usersession = users_data[b]['session']
+                for c in range(len(session_data)):
+                    if usersession == session_data[c]['id']:
+                        await self.bot.say("Session:\t\t {0}" .format(session_data[c]['title']))
+                        await self.bot.say("_")
 
     # async def drawpilesessionsizes(self):
     #     """Get all sessions running sizes"""
